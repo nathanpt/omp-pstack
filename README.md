@@ -57,9 +57,14 @@ gate themselves with it directly instead of deferring to install time.
 |---|---|
 | `create-verification-skill` | A project has no scripted way to prove its behavior end to end. Builds a control script plus a feature map. |
 | `maintain-verification-skill` | The verification skill or feature map may have drifted from the code. One source sweep, one live pass, corrections only where a run proves drift. |
+| `interrogate` | A change needs to be broken before it lands. Two adversaries on different model families, and only findings reproduced by a run survive. |
 
-Both are extractions of the two most load-bearing skills in the original pack.
-Everything else in pstack composes on top of them; start here.
+The first two are extractions of the two most load-bearing skills in the original
+pack. `interrogate` is the third and the first built OMP-first rather than ported.
+
+`interrogate` is gated behind explicit invocation and will not appear in the
+model-facing catalog. That is deliberate: deciding on its own to seat two
+adversaries against a repo is not a call an agent should make quietly.
 
 ## Install
 

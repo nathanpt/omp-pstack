@@ -77,6 +77,15 @@ class SectionCoverageTests(unittest.TestCase):
             "## 5. Report",
             "## Stop conditions",
         ),
+        "interrogate": (
+            "## Scope: the project root is the boundary",
+            "## 1. Frame the scope and the intent",
+            "## 2. Seat two adversaries",
+            "## 3. Verify every finding yourself",
+            "## 4. Account for every seat",
+            "## 5. Report",
+            "## Anti-patterns",
+        ),
     }
 
     CONTAINMENT = (

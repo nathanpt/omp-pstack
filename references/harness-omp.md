@@ -20,6 +20,24 @@ skill wins and this file is the bug. Read it before changing anything here.
 | `run` | Direct command execution. Read the exit code separately from the output; a shell wrapper can mask an inner failure. |
 | `ask-human` | Ask in the session. Reserve it for irreversible actions and decisions that are genuinely not the agent's. |
 
+## Adversarial seating (used by `interrogate`)
+
+Two adversaries, two different model families, neither sharing the caller's
+family. With the roles in a default OMP config that means `@reviewer` and
+`@advisor`, both of which sit outside the `default` role's family. Seating an
+adversary on `@task` puts it on the caller's own family and halves the point of
+running two.
+
+Repros are the one case where isolation must **retain** rather than apply. An
+adversary must write a repro to prove a finding, so isolation is mandatory, but
+nothing it writes may reach the working tree. Prefer retained artifacts with
+apply disabled, and read the repro out of the isolated copy when verifying.
+Confirm which mechanism the installed version uses before relying on a path.
+
+A seat that never reports is a gap. OMP reports agent state, so check for a
+terminal state rather than inferring success from absence of error.
+
+
 ## Verified, not inferred
 
 Exercised live against OMP 18.18.3:
