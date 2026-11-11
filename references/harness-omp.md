@@ -39,25 +39,42 @@ terminal state rather than inferring success from absence of error.
 
 ## Arena seating
 
-Three seats, three families, all on flat-rate plans. Nothing here should touch a
-per-token provider.
+All seats sit on flat-rate plans. Nothing here should touch a per-token provider.
 
 | Seat | Role | Resolves to | Why this one |
 |---|---|---|---|
 | Candidate A | `@arena-a` | `openai-codex/gpt-6-luna:max` | Cheaper tier of the strongest code family. Candidates generate bulk, so pay for volume rather than peak |
 | Candidate B | `@arena-b` | `opencode-go/deepseek-v4.1-flash:max` | Third family, fast and inexpensive |
-| Judge | `@judge` | `xai-oauth/grok-4.5:max` | A fourth family, outside the caller's and both candidates' |
+| Judge | `@judge` | `zai/glm-5.3:max` | The only family left that neither candidate occupies |
 
-### Why the judge is not on `zai`
+### The judge shares the caller's family, and that costs something
 
-`@judge-fallback` exists (`zai/glm-5.3:max`) for weeks when the Grok plan runs
-out. Using it has a specific cost worth naming: `zai` is the `default` role's
-family, so the judge and the session that wrote the rubric share a family. Its
-agreement then confirms your framing rather than testing your candidates, and
-agreement is the signal step 3 leans on.
+Three authenticated families: `zai`, `openai-codex`, `opencode-go`. The caller
+runs on `zai`, the candidates occupy the other two. So the judge must either
+share the rubric author's family or share a candidate's.
 
-A fallback judge is legitimate but weaker. When you use one, say so in the
-report. Silence turns a degraded confirmation into a normal-looking one.
+Sharing the rubric author's is the lesser problem. A judge on `zai` still reads
+both candidates cold, which is the point of judging. A judge on a candidate's
+family would be scoring an artifact built by its own priors, which is worse than
+correlated framing.
+
+What it costs: the judge and the session that wrote the rubric share a family,
+so their agreement confirms your framing rather than testing your candidates.
+Weight it accordingly, in this order:
+
+- **Disagreement is the strong signal.** Take it seriously and read both
+  rationales. A same-family judge that still disagrees with your scoring has
+  found something.
+- **Agreement is weak.** Do not treat it as confirmation. Your own
+  criterion-by-criterion read is the primary verdict, not a cross-check on his.
+- **Say which judge ran, and that it shares your family.** In the report.
+
+### No fallback judge
+
+There is no fourth family to fall back to, and a fallback on a candidate's
+family would be worse than no judge at all. If `zai` quota is exhausted, do not
+run arena. Wait for the quota to reset. Running arena without a judge that meets
+the rule produces a verdict you should not act on.
 
 Do not seat a candidate on `@slow`. It resolves to the `zai` family and draws on
 the same plan as the interactive session.

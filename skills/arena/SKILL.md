@@ -49,12 +49,12 @@ record, not a silent pass.
 
 Send the rubric and the candidates, labelled by position not by author, to one
 judge. It scores each criterion and recommends a base with a reason. The judge
-must not be from the same model family as you, because a family member shares
-your blind spots and that is what you are paying to escape.
+must not sit in a candidate's model family, or it is grading an artifact built by
+its own priors.
 
-Read both end to end anyway and score them yourself. Agreement confirms the pick.
-Disagreement means one of you is biased or the rubric was ambiguous, so read both
-rationales rather than deferring to the judge. Pick the one a future maintainer
+Read both end to end anyway and score them yourself. When the judge does share
+your family, its agreement only confirms your framing: treat disagreement as the
+strong signal and your own read as the verdict. Pick the one a future maintainer
 can extend without breaking its invariants. On a tie, prefer the cleaner boundary
 and the smaller surface.
 

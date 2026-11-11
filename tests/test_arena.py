@@ -39,15 +39,21 @@ class RubricBeforeBuildTests(unittest.TestCase):
 
 
 class JudgeIndependenceTests(unittest.TestCase):
-    def test_judge_is_never_from_the_callers_family(self):
+    def test_judge_never_sits_in_a_candidates_family(self):
+        """A judge inside a candidate's family grades its own priors."""
+        self.assertIn("must not sit in a candidate's model family", body())
+
+    def test_same_family_judge_weights_disagreement_over_agreement(self):
+        """A correlated judge agrees cheaply, so agreement stops being evidence."""
         text = body()
-        self.assertIn("must not be from the same model family as you", text)
+        self.assertIn("its agreement only confirms your framing", text)
+        self.assertIn("treat disagreement as the strong signal", text)
 
     def test_judge_does_not_replace_the_operators_own_reading(self):
         """Deferring to the judge turns a second opinion into the only opinion."""
         text = body()
         self.assertIn("Read both end to end anyway", text)
-        self.assertIn("rather than deferring to the judge", text)
+        self.assertIn("your own read as the verdict", text)
 
     def test_candidates_are_labelled_by_position_not_author(self):
         text = body()
@@ -100,12 +106,17 @@ class CostDisciplineTests(unittest.TestCase):
         """@slow looks like a worker role and silently lands on the caller's family."""
         self.assertIn("Do not seat a candidate on `@slow`", adapter())
 
-    def test_adapter_documents_that_the_fallback_judge_is_weaker(self):
+    def test_adapter_names_the_same_family_cost(self):
         """A same-family judge confirms the rubric instead of testing the candidates."""
         text = adapter()
-        self.assertIn("@judge-fallback", text)
         self.assertIn("confirms your framing rather than testing your candidates", text)
-        self.assertIn("say so in the", text)
+        self.assertIn("Disagreement is the strong signal", text)
+
+    def test_adapter_forbids_a_degraded_run_when_quota_runs_out(self):
+        """Better to postpone arena than to judge it with a candidate's family."""
+        text = adapter()
+        self.assertIn("do not", text.lower())
+        self.assertIn("Wait for the quota to reset", text)
 
     def test_adapter_seats_candidates_on_their_own_roles(self):
         """Candidates must not borrow @reviewer or @advisor, which other skills own."""
