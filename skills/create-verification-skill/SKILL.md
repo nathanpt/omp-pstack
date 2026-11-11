@@ -1,7 +1,7 @@
 ---
 name: create-verification-skill
 description: Use when a project has no scripted way to prove its behavior end to end. Builds a project-local verification skill with a control script and a feature map, so an agent can close its own loop instead of asserting success.
-version: 0.1.0
+version: 0.2.0
 license: MIT
 ---
 
@@ -11,7 +11,17 @@ A verification skill lets an agent check its own work against the real artifact.
 Without one, every claim of done is a self-report and you are the only real test.
 
 **Stop if the project already has one.** Extending it is `maintain-verification-skill`.
-Two overlapping verifiers are worse than one imperfect one.
+
+## Scope: the project root is the boundary
+
+Work only inside the project you were asked about. Never infer a convention from a
+sibling project, a parent directory, or a global skill library: a sibling's layout
+is not this project's convention, and copying it produces a skill no harness loads.
+
+- If the project has a project-local skills directory, use it. If it has several,
+  use the one its own instructions name, and say which you chose and why.
+- If it has none, say so and use the documented default. Never survey the parent
+  directory or open a sibling project to find an example.
 
 ## 1. Establish the observable surface
 
@@ -36,26 +46,25 @@ importance:
 - **Subcommands over flags**, so functionality discloses gradually.
 - **Real help text** per subcommand, the cheapest documentation there is.
 
-The control script is code. It gets tests and it is committed. It is the artifact
-a reviewer re-runs to check the claim, which is the entire point.
+The control script is code: tested, committed, and the artifact a reviewer re-runs.
 
 ## 3. Build the feature map
 
-One index plus one file per feature area under `references/features/`. Use
-`references/feature-map.md` as the shape. Each feature records what it does, how a
-user reaches it, which command drives it, and its traps.
+One index plus one file per feature area under `references/features/`, shaped by
+`references/feature-map.md`. Each feature records what it does, how a user reaches
+it, which command drives it, and its traps.
 
 The map is compressed context, not human documentation. Write it for a reader who
 has never seen the project and cannot open a browser.
 
 ## 4. Wire the project-local skill
 
-Create `verify-<project>` inside the project, not globally. It names two paths:
-the control script and the feature map. Under thirty lines. A signpost, not an essay.
+Create `verify-<project>` in the skills location Scope identified. It names two
+paths: the control script and the feature map. Under thirty lines: a signpost.
 
-Register it with the harness per the register row of `references/harness-contract.md`.
-Discovery rules vary by harness and depth, so verify the skill appears rather than
-assuming the file is enough.
+Register it per the register row of `references/harness-contract.md`. If the
+harness does not discover it, report that. Do not invent an alternative location
+to make discovery appear to work.
 
 ## 5. Prove it before declaring it done
 
@@ -63,20 +72,14 @@ Run three checks across different features and show the output. For each, break
 the behavior deliberately and confirm the check fails. A check that passes when
 the feature is removed is decoration.
 
-Report: what was built, features mapped, checks demonstrated red then green, and
-what remains unobservable.
-
-## Quality bar
-
-Every mapped feature has a command that drives it. Every check reads the real
-artifact, never a cached copy or an old log. Failure messages say what to do next.
-The common case runs as one command.
+Report: what was built, features mapped, checks red then green, what remains
+unobservable, and which skills location you used.
 
 ## Anti-patterns
 
-- **Only running the unit suite.** That is a test runner. The gap here is the
+- **Only running the unit suite.** That is a test runner; the gap here is the
   boundary unit tests cannot see.
-- **Scripting the eyeball.** Driving a surface and printing a screenshot is not a
-  check. Assert something.
-- **One command with twenty modes.** Nobody learns it and failures tell you nothing.
+- **Borrowing a sibling project's layout.** The only convention that matters is
+  the one this project's harness actually reads.
+- **Scripting the eyeball.** Printing a screenshot is not a check. Assert something.
 - **Mapping features that cannot be driven.** That is a wish list.

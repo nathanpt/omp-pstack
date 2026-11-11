@@ -60,15 +60,16 @@ class SizeDisciplineTests(unittest.TestCase):
 class SectionCoverageTests(unittest.TestCase):
     REQUIRED = {
         "create-verification-skill": (
+            "## Scope: the project root is the boundary",
             "## 1. Establish the observable surface",
             "## 2. Build the control script",
             "## 3. Build the feature map",
             "## 4. Wire the project-local skill",
             "## 5. Prove it before declaring it done",
-            "## Quality bar",
             "## Anti-patterns",
         ),
         "maintain-verification-skill": (
+            "## Scope: the project root is the boundary",
             "## 1. Sweep the source",
             "## 2. One live pass",
             "## 3. Correct only what a run proved",
@@ -77,6 +78,26 @@ class SectionCoverageTests(unittest.TestCase):
             "## Stop conditions",
         ),
     }
+
+    CONTAINMENT = (
+        "sibling project",
+        "parent directory",
+    )
+
+    def test_every_skill_states_its_containment_rule(self):
+        """A skill that does not fence itself invites a walk into neighbouring projects.
+
+        Observed failure: a run inside one project read a sibling project's
+        skills layout and adopted it as the local convention, ignoring the
+        project's own skills directory. The fix is a stated boundary, and this
+        test keeps it from being edited away.
+        """
+        for path in skill_files():
+            body = " ".join(path.read_text().split())
+            with self.subTest(skill=path.parent.name):
+                self.assertIn("## Scope: the project root is the boundary", body)
+                for phrase in self.CONTAINMENT:
+                    self.assertIn(phrase, body, f"{path.parent.name} never forbids {phrase!r}")
 
     def test_required_sections_present(self):
         for path in skill_files():

@@ -31,7 +31,7 @@ Skill bodies and adapters use these eight verbs. Nothing else.
 | `await` | Wait for a worker to reach a terminal state. | Distinguish done, blocked, failed, and timed out. A finished process is not an accepted artifact. |
 | `isolate` | Give a worker its own copy of the tree. | Required for any worker that writes. Shared writes corrupt each other. |
 | `model-role` | Request a capability tier (fast, deep, judgement) rather than a model id. | Tiers resolve through the harness's own routing. Never hardcode an id. |
-| `register` | Make a project-local skill discoverable to the harness. | Discovery rules differ per harness and per directory depth. Verify, do not assume. |
+| `register` | Make a project-local skill discoverable to the harness. | Use the location the project itself defines. If it defines none, use the adapter's documented default. Never survey sibling projects or the project's parent to infer a convention. Verify discovery rather than assuming it. |
 | `run` | Execute a command in the project and read its exit code and output. | The exit code is part of the evidence. A wrapper can mask an inner failure. |
 | `ask-human` | Stop and ask, because the next step is irreversible or the decision is not yours. | Reserve this. A reversible choice is not a human decision. |
 

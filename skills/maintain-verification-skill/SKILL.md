@@ -7,18 +7,21 @@ license: MIT
 
 # Maintain a verification skill
 
-A verification skill rots silently. The code moves, the map does not, and the
-next agent follows a confident instruction to a place that no longer exists. Then
-it reports success on a feature it never reached.
-
-Maps do not fail loudly. That is the whole problem.
+A verification skill rots silently. The code moves, the map does not, and the next
+agent follows a confident instruction to a place that no longer exists, then reports
+success on a feature it never reached. Maps do not fail loudly. That is the problem.
 
 ## When to run this
 
 - On a schedule, because drift is continuous and cheap to fix but expensive to find.
 - After any change that adds, renames, removes, or moves a user-visible surface.
-- When a verification command fails in a way that suggests the map, not the code,
-  is wrong.
+- When a verification command fails in a way that suggests the map, not the code.
+
+## Scope: the project root is the boundary
+
+Read and correct only inside the project you were asked about. Never open a sibling
+project, a parent directory, or a global skill library to see how something is done
+elsewhere; their conventions are not this project's.
 
 ## 1. Sweep the source
 
@@ -55,8 +58,10 @@ Deliver the corrections as a single reviewable unit — one branch, one pull
 request, one description listing each drift and its evidence. If there are more
 than a handful, split by feature area rather than shipping an unreviewable wall.
 
-State explicitly which commands you could not run. Silently omitting them reads
-as "all verified" and is the one failure mode this skill exists to prevent.
+State explicitly which commands you could not run. Silently omitting them reads as
+"all verified". Never record a command as verified when what you verified was that a
+file exists: an agent marking a feature green from documentation rather than behavior
+is the failure this skill exists to catch.
 
 ## 5. Report
 
@@ -75,9 +80,3 @@ as "all verified" and is the one failure mode this skill exists to prevent.
 - **A command fails because a precondition is missing** (no fixture, no
   credentials, no seeded data). Report it as unverifiable. Do not guess what it
   would have printed.
-
-## The rule that matters
-
-Never record a command as verified when what you verified was that the file
-exists. The failure this skill is built to catch is an agent marking a feature
-green from the presence of documentation rather than from the behavior.
