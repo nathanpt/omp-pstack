@@ -16,18 +16,23 @@ skill wins and this file is the bug. Read it before changing anything here.
 | `await` | Native result delivery with a bounded deadline. Do not poll a model in a loop. `agent://` reports status while unpublished. |
 | `isolate` | `isolated: true` **on every task that writes.** Setting it globally does not isolate individual assignments. Native isolation may use independent copies rather than git worktrees; confirm the mechanism when it matters. |
 | `model-role` | `@task`, `@smol`, `@slow`, `@plan` resolve through `modelRoles` in `config.yml`. Do not hardcode provider or model ids at dispatch, and do not override a configured agent's role mapping. |
-| `register` | A skill is discovered at exactly `skills/<name>/SKILL.md` — **one level only.** Nested copies at `skills/vendor/<name>/SKILL.md` are not discovered. Symlinked directories at depth one are followed, so a container repo can hold skills while exposing them by symlink. |
+| `register` | Two roots, both at depth one. **Global:** `~/.omp/agent/skills/<name>/SKILL.md`. **Project:** `<project>/.omp/skills/<name>/SKILL.md`. Nested copies at `<root>/vendor/<name>/SKILL.md` are not discovered. Symlinked directories at depth one are followed, so a container repo can hold skills while exposing them by symlink. Prefer the project root for anything project-specific: it travels with the repo and does not leak one project's verifier into every other project. |
 | `run` | Direct command execution. Read the exit code separately from the output; a shell wrapper can mask an inner failure. |
 | `ask-human` | Ask in the session. Reserve it for irreversible actions and decisions that are genuinely not the agent's. |
 
 ## Verified, not inferred
 
-Exercised live on 2026-11-09 against OMP 18.18.3:
+Exercised live against OMP 18.18.3:
 
 - **Registration depth.** Two identical probe skills were placed at
   `skills/probe-flat/` and `skills/container/skills/link-probe/`. Asked the model
   which it could see: flat reported present, nested reported absent, symlinked
   reported present. So: depth one only, symlinks followed.
+- **Project-local root.** A throwaway project containing only
+  `.omp/skills/proj-probe/SKILL.md` was opened as the working directory. Asked
+  the model whether it could see `proj-probe`: reported present. Confirmed again
+  in a real repository (2026-11-10), where `.omp/skills/verify-fin3/` was
+  discoverable and the repo-root `skills/` directory was not.
 - **Agent types.** Enumerated from `omp agents unpack` into a throwaway
   directory. The six bundled definitions and their `spawns:` nesting are observed
   config, not documentation.
@@ -37,6 +42,17 @@ Exercised live on 2026-11-09 against OMP 18.18.3:
 Not independently exercised here: `collect` and `await` latency behaviour under
 concurrency, and `isolate` on a repository large enough for copy cost to matter.
 Treat those as read-from-documentation until someone runs them.
+
+## Choosing between the two roots
+
+Put a project-specific skill (a `verify-<project>` control skill, a repo's own
+conventions) in the **project** root. Put a reusable skill you want in every
+session in the **global** root.
+
+The failure mode of getting this backwards: a project verifier in the global root
+appears in every unrelated project, points at paths that do not exist there, and
+teaches agents that skills sometimes lie. A skill that references
+`scripts/verify.py` is meaningless in a repo with no such file.
 
 ## Optional: quiet the skill list
 

@@ -2,7 +2,7 @@
 
 What was exercised versus what was read. Untested mappings are claims, not facts.
 
-## Tested live — 2026-11-09, OMP 18.18.3
+## Tested live — OMP 18.18.3
 
 **Skill discovery depth.** Three probe skills, identical bodies, different layouts,
 asked the model which it could see:
@@ -16,6 +16,16 @@ asked the model which it could see:
 Conclusion: discovery is exactly one level; symlinked directories are followed.
 This is why `install.sh` symlinks rather than copying, and why this repository can
 live inside the skills directory without being mistaken for a skill.
+
+**Project-local discovery root.** Two independent confirmations:
+
+- A throwaway project containing only `.omp/skills/proj-probe/SKILL.md`, opened as
+  the working directory, reported the skill visible (`PROJLOCAL=yes`).
+- A real repository where `.omp/skills/verify-fin3/` resolved via `skill://` and
+  the repo-root `skills/` directory did not.
+
+Conclusion: `<project>/.omp/skills/<name>/SKILL.md` is a second discovery root at
+the same depth. Project-specific skills belong there, not in the global root.
 
 **Agent types.** Enumerated with `omp agents unpack --dir <throwaway>`. Six bundled
 definitions, including the `spawns:` nesting declarations. Observed config, not
