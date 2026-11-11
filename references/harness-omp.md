@@ -37,6 +37,28 @@ Confirm which mechanism the installed version uses before relying on a path.
 A seat that never reports is a gap. OMP reports agent state, so check for a
 terminal state rather than inferring success from absence of error.
 
+## Arena seating
+
+Three seats, three families, all on flat-rate plans. Nothing here should touch a
+per-token provider.
+
+| Seat | Role | Resolves to |
+|---|---|---|
+| Candidate A | `@reviewer` | `openai-codex/gpt-6-sol` |
+| Candidate B | `@advisor` | `opencode-go/muse-spark-1.3-contributor` |
+| Judge | `@judge` | `xai-oauth/grok-4.5` |
+
+The judge must not share a family with the caller, and ideally not with either
+candidate. With the `default` role on `zai`, a judge on `xai-oauth` clears all
+three.
+
+Do not seat a candidate on `@slow`. It resolves to the `zai` family, which is the
+caller's own, and it draws on the same plan as the interactive session.
+
+`@judge` does not exist in a stock config. Add it to `modelRoles` once. Without
+it, name a fourth family explicitly and say so in the report rather than
+silently judging with a candidate's family.
+
 
 ## Verified, not inferred
 

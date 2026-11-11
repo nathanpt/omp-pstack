@@ -58,6 +58,7 @@ gate themselves with it directly instead of deferring to install time.
 | `create-verification-skill` | A project has no scripted way to prove its behavior end to end. Builds a control script plus a feature map. |
 | `maintain-verification-skill` | The verification skill or feature map may have drifted from the code. One source sweep, one live pass, corrections only where a run proves drift. |
 | `interrogate` | A change needs to be broken before it lands. Two adversaries on different model families, and only findings reproduced by a run survive. |
+| `arena` | One attempt would lock in the wrong shape. Two candidates built blind, judged from a third model family, best of the loser grafted in, result verified. |
 
 The first two are extractions of the two most load-bearing skills in the original
 pack. `interrogate` is the third and the first built OMP-first rather than ported.

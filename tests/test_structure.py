@@ -77,6 +77,16 @@ class SectionCoverageTests(unittest.TestCase):
             "## 5. Report",
             "## Stop conditions",
         ),
+        "arena": (
+            "## Scope: the project root is the boundary",
+            "## When this earns its cost",
+            "## 1. Frame, and write the rubric first",
+            "## 2. Build two candidates",
+            "## 3. Judge blind, then read everything yourself",
+            "## 4. Graft, or ship the consensus",
+            "## 5. Verify the result",
+            "## Report",
+        ),
         "interrogate": (
             "## Scope: the project root is the boundary",
             "## 1. Frame the scope and the intent",
