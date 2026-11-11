@@ -39,7 +39,18 @@ BANNED_IN_BODY = (
 
 # Frontmatter keys that are portable. A harness-specific key makes the shipped
 # file work on exactly one harness.
-ALLOWED_FRONTMATTER = {"name", "description", "version", "license"}
+#
+# `disable-model-invocation` is the one deliberate exception. This repo is
+# OMP-first, so gating a skill behind explicit invocation is a legitimate author
+# choice rather than something to hide in an install step. It stays banned in
+# skill bodies, where naming it would mean the prose depends on the harness.
+ALLOWED_FRONTMATTER = {
+    "name",
+    "description",
+    "version",
+    "license",
+    "disable-model-invocation",
+}
 
 DESCRIPTION_LIMIT = 1024
 

@@ -3,9 +3,13 @@
 Every harness runs agents differently. A skill that names a harness mechanism is
 a skill that only works on one machine.
 
-This file defines the small vocabulary that skill bodies are allowed to use. Each
-harness then supplies one adapter file mapping that vocabulary to its own
-mechanisms. Adapters are data. Skills are logic.
+This repo is OMP-first: OMP is what it runs on today, and the only adapter any of
+this has ever been executed against. This file is not a portability promise. It
+is the seam that keeps the option open, and its cost is eight rows.
+
+The vocabulary that skill bodies are allowed to use. Each harness supplies one
+adapter file mapping that vocabulary to its own mechanisms. Adapters are data.
+Skills are logic.
 
 ## The invariant
 

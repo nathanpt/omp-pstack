@@ -135,7 +135,9 @@ option to stop early.
 - **One target project.** It has a documented CLI, a manifest format, and a
   deliberate layering. A project without those may not support this shape at all.
 - **One harness.** Only OMP was exercised. The `references/harness-contract.md`
-  verbs are asserted portable by test, not by a second harness running them.
+  verbs are asserted harness-neutral by test; no second harness has ever run
+  them. This repo is an OMP implementation, and calling it harness-agnostic was
+  an overclaim it no longer makes.
 - **The map has not been maintained.** `maintain-verification-skill` has never
   been run against the target since the map was written, so the claim that it
   prevents drift is untested.

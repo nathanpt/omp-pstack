@@ -1,41 +1,55 @@
-# pstack (adopted)
+# omp-pstack
 
-Harness-agnostic agent skills, adopted from Lauren Tan's
-[pstack](https://github.com/cursor/plugins/tree/main/pstack) and rewritten to name
-no harness.
+An **OMP-first implementation** of Lauren Tan's
+[pstack](https://github.com/cursor/plugins/tree/main/pstack). Her skills assume
+Cursor: its task tool, its agent types, its model slugs, its plugin manifest, its
+cloud agents. This repo keeps the ideas and supplies OMP's mechanisms.
 
 This is not a fork. Nothing here is copied verbatim. The ideas are hers; the
-portability layer and the failure modes encoded in the tests are local.
+port, the closed test suite, and the recorded failure modes are local.
+
+## What this repo claims, precisely
+
+It is **not** harness-agnostic, and the earlier version of this README was wrong
+to say so. The accurate claim is narrower:
+
+> One logic layer, per-harness adapters, one adapter proven.
+
+The skill bodies are verified to name no harness token, and a test enforces it.
+What has never happened is a second harness actually running them. One adapter is
+not evidence of portability; it is evidence of one working adapter.
+
+The seam is kept for a concrete reason, not for purity. A terminal multiplexer
+that can open a pane and run a code session is the intended second adapter, and
+one of the eight verbs maps cleanly to a pane while the rest need real work. With
+the seam, that adapter is an afternoon. Without it, the logic rots into OMP nouns
+and the option closes silently.
 
 ## Status: two skills, one evaluated run
 
 `create-verification-skill` and `maintain-verification-skill` are adopted. They
-have been installed on one harness and run once against a real project, which
-produced a working control script, a feature map carrying four empirically
-earned traps, and a proven green path.
+have been run once against a real project, which produced a working control
+script, a feature map carrying four empirically earned traps, and a proven green
+path.
 
 What they have not proven is the failure path. See
 [`EVALUATION.md`](EVALUATION.md) for the measured numbers, the split between what
-was verified and what was merely reported, and the specific gaps that remain. The
-short version is that the green path is evidenced and the red path is not.
+was verified and what was merely reported, and the gaps that remain. The short
+version is that the green path is evidenced and the red path is not.
 
-The rest of Lauren's pack is deliberately not here. `interrogate` is the next
-candidate and waits until this pair has a verdict worth auditing.
+`interrogate` is the next skill and the first one built OMP-first from the start,
+with two adversaries rather than Lauren's four.
 
-## Why harness-agnostic
+## How the split works
 
-The original skills assume one harness: its task tool, its agent types, its model
-slugs, its plugin manifest. Those are the fastest-rotting nouns in the stack. A
-skill that says "spawn a `scout`" breaks silently the day `scout` is renamed.
-
-So the split here is:
-
-- **Skills** carry logic and name no mechanism.
+- **Skills** carry logic and name no harness mechanism.
 - **Adapters** (`references/harness-<name>.md`) carry mechanisms and no logic.
 - **The contract** (`references/harness-contract.md`) defines the eight verbs both sides use.
 
 A test fails the build if a skill body names a harness token. That is enforced,
-not aspirational.
+not aspirational. `disable-model-invocation` is the one documented exception: it
+is an OMP mechanism, and since this repo no longer pretends otherwise, skills may
+gate themselves with it directly instead of deferring to install time.
 
 ## Skills
 
