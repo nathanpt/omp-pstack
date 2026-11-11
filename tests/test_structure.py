@@ -128,6 +128,26 @@ class SectionCoverageTests(unittest.TestCase):
                 with self.subTest(skill=path.parent.name, section=section):
                     self.assertIn(section, body)
 
+    def test_skills_teach_the_discovery_mechanism(self):
+        """A generated skill nobody can discover is a skill that does not exist.
+
+        Observed failure: an agent wired the skill correctly, then patched
+        discoverability into a rules file because nothing told it the skill's
+        description is what a harness advertises. The rules file was local-only
+        and the skill shipped, so the two drifted immediately.
+        """
+        body = " ".join((SKILLS / "create-verification-skill" / "SKILL.md").read_text().split())
+        self.assertIn("description is the discovery mechanism", body)
+        self.assertIn("never registers", body)
+        self.assertIn("a vague one never fires", body)
+        self.assertIn("adding a rules-file pointer when discovery fails", body.lower())
+
+    def test_maintain_locates_its_target_before_sweeping(self):
+        body = " ".join((SKILLS / "maintain-verification-skill" / "SKILL.md").read_text().split())
+        self.assertIn("Locate the target first", body)
+        self.assertIn("Several candidates, ask which", body)
+        self.assertIn("point at the create skill", body)
+
     def test_steps_are_ordered(self):
         """Numbered steps must appear in ascending order, not just exist."""
         for path in skill_files():

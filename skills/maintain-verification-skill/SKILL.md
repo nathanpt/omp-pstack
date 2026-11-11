@@ -25,8 +25,11 @@ elsewhere; their conventions are not this project's.
 
 ## 1. Sweep the source
 
-Enumerate the surface from the code, not from the map: entry points, commands,
-options, routes, exported functions, whatever the project's observable edge is.
+Locate the target first: the project-local skill whose body has launch and drive
+sections plus a feature map. Several candidates, ask which. None, point at the
+create skill rather than inventing a target. Then enumerate the surface from the
+code, not the map: entry points, commands, options, routes, exported functions,
+whatever the project's observable edge is.
 
 Diff that list against the map. The diff is the work item.
 
