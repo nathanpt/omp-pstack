@@ -25,7 +25,7 @@ one of the eight verbs maps cleanly to a pane while the rest need real work. Wit
 the seam, that adapter is an afternoon. Without it, the logic rots into OMP nouns
 and the option closes silently.
 
-## Status: two skills, one evaluated run
+## Status: four skills, one evaluated run
 
 `create-verification-skill` and `maintain-verification-skill` are adopted. They
 have been run once against a real project, which produced a working control
@@ -37,8 +37,8 @@ What they have not proven is the failure path. See
 was verified and what was merely reported, and the gaps that remain. The short
 version is that the green path is evidenced and the red path is not.
 
-`interrogate` is the next skill and the first one built OMP-first from the start,
-with two adversaries rather than Lauren's four.
+`interrogate` and `arena` followed, both built OMP-first rather than ported, and
+both still without a real run behind them.
 
 ## How the split works
 
@@ -58,14 +58,16 @@ gate themselves with it directly instead of deferring to install time.
 | `create-verification-skill` | A project has no scripted way to prove its behavior end to end. Builds a control script plus a feature map. |
 | `maintain-verification-skill` | The verification skill or feature map may have drifted from the code. One source sweep, one live pass, corrections only where a run proves drift. |
 | `interrogate` | A change needs to be broken before it lands. Two adversaries on different model families, and only findings reproduced by a run survive. |
-| `arena` | One attempt would lock in the wrong shape. Two candidates built blind, judged from a third model family, best of the loser grafted in, result verified. |
+| `arena` | One attempt would lock in the wrong shape. Two candidates built blind, judged from outside both their families, best of the loser grafted in, result verified. |
 
 The first two are extractions of the two most load-bearing skills in the original
 pack. `interrogate` is the third and the first built OMP-first rather than ported.
 
-`interrogate` is gated behind explicit invocation and will not appear in the
-model-facing catalog. That is deliberate: deciding on its own to seat two
-adversaries against a repo is not a call an agent should make quietly.
+`interrogate` and `arena` are both gated behind explicit invocation and appear in
+no model-facing catalog. OMP treats that flag as `hide`, so the skill is invisible
+rather than merely unselected: invoke it as `/skill:<name>`. That is deliberate.
+Deciding on its own to seat two adversaries, or to spend two builds and a judge on
+one decision, is not a call an agent should make quietly.
 
 ## Install
 

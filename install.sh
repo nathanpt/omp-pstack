@@ -26,4 +26,21 @@ for src in "$repo"/skills/*/; do
   ln -sfn "${src%/}" "$dest"
   echo "linked $dest -> ${src%/}"
 done
+
+# Prune links into this repo whose skill no longer exists. Only links pointing at
+# $repo/skills are touched, so a neighbouring skill library is never disturbed.
+if [ "$uninstall" = 0 ]; then
+  for link in "$target"/*; do
+    [ -L "$link" ] || continue
+    dest="$(readlink "$link")"
+    case "$dest" in
+      "$repo"/skills/*) ;;
+      *) continue ;;
+    esac
+    [ -d "$dest" ] && continue
+    rm "$link"
+    echo "pruned stale link $link (target gone: $dest)"
+  done
+fi
+
 exit "$status"

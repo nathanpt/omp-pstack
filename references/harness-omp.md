@@ -16,17 +16,17 @@ skill wins and this file is the bug. Read it before changing anything here.
 | `await` | Native result delivery with a bounded deadline. Do not poll a model in a loop. `agent://` reports status while unpublished. |
 | `isolate` | `isolated: true` **on every task that writes.** Setting it globally does not isolate individual assignments. Native isolation may use independent copies rather than git worktrees; confirm the mechanism when it matters. |
 | `model-role` | `@task`, `@smol`, `@slow`, `@plan` resolve through `modelRoles` in `config.yml`. Do not hardcode provider or model ids at dispatch, and do not override a configured agent's role mapping. |
-| `register` | Two roots, both at depth one. **Global:** `~/.omp/agent/skills/<name>/SKILL.md`. **Project:** `<project>/.omp/skills/<name>/SKILL.md`. Nested copies at `<root>/vendor/<name>/SKILL.md` are not discovered. Symlinked directories at depth one are followed, so a container repo can hold skills while exposing them by symlink. Prefer the project root for anything project-specific: it travels with the repo and does not leak one project's verifier into every other project. |
+| `register` | Four roots, all at depth one. **Global:** `~/.omp/agent/skills/<name>/SKILL.md`. **Project:** `<project>/.omp/skills/<name>/SKILL.md`. **User agents:** `~/.agents/skills/<name>/SKILL.md`. **Walk-up:** `.agent/skills` or `.agents/skills` found from the project upward. Nested copies at `<root>/vendor/<name>/SKILL.md` are not discovered. Symlinked directories at depth one are followed. Prefer the project root for anything project-specific. |
 | `run` | Direct command execution. Read the exit code separately from the output; a shell wrapper can mask an inner failure. |
 | `ask-human` | Ask in the session. Reserve it for irreversible actions and decisions that are genuinely not the agent's. |
 
 ## Adversarial seating (used by `interrogate`)
 
-Two adversaries, two different model families, neither sharing the caller's
-family. With the roles in a default OMP config that means `@reviewer` and
-`@advisor`, both of which sit outside the `default` role's family. Seating an
-adversary on `@task` puts it on the caller's own family and halves the point of
-running two.
+Two adversaries, on the same two seats arena uses: `@arena-a` and `@arena-b`.
+Dedicated roles keep these prices separate from `@reviewer` and `@advisor`, which
+have other jobs, and `@advisor` in particular is also the live advisor that reads
+every turn. Seating an adversary on `@task` would put it on the caller's own
+family and halve the point of running two.
 
 Repros are the one case where isolation must **retain** rather than apply. An
 adversary must write a repro to prove a finding, so isolation is mandatory, but
@@ -45,10 +45,16 @@ Observed failure (2026-11-11): an interrogate run with no location rule created
 project, outside git, and with nothing to remove them. The skill had said "its own
 isolated copy" and never said where.
 
-So: confirm the location the harness will use before dispatching. If the answer is
-"the agent chooses", choose the system temporary directory, named for the project
-and the seat. Never a sibling of the project. Remove the copies when the run ends;
-proofs are files the adversary reported, not the tree it worked in.
+So confirm the location before dispatching. If the answer is "the agent chooses",
+follow `references/isolation.md` and pick a disk-backed root.
+
+On this machine that root is `/mnt/dev/tmp`, not `/tmp`. `/mnt/dev` is ext4 with
+roughly 750 GB free, while `/tmp` is tmpfs: 16 GB of RAM, 4.1 GB free at the time
+of writing. A single run already reached 1.1 GB because each copy carried the
+project's 676 MB virtualenv. Copies in tmpfs consume memory and disappear on
+reboot.
+
+Copies land at `<scratch-root>/<skill>-<project>/seat-<x>/`.
 
 A seat that never reports is a gap. OMP reports agent state, so check for a
 terminal state rather than inferring success from absence of error.
@@ -130,13 +136,16 @@ appears in every unrelated project, points at paths that do not exist there, and
 teaches agents that skills sometimes lie. A skill that references
 `scripts/verify.py` is meaningless in a repo with no such file.
 
-## Optional: quiet the skill list
+## Gating a skill
 
-OMP honours `disable-model-invocation: true` in skill frontmatter, which keeps a
-skill out of automatic selection while leaving the file readable on disk. It is
-**not** set in this repository, because it is a harness-specific frontmatter key
-and would make the shipped files non-portable. Add it locally if the skill list
-gets noisy, and expect to re-add it after an update.
+OMP honours `disable-model-invocation: true` in skill frontmatter, and aliases it
+to `hide`: the skill leaves the catalog entirely rather than merely being
+unselected. It stays loadable by name through `skill://<name>` and invocable as
+`/skill:<name>`, but nothing surfaces it and an agent will not find it alone.
+
+`interrogate` and `arena` set it deliberately. This repo is OMP-first, so the key
+is no longer treated as non-portable. It stays banned in skill prose, where naming
+it would couple the text to the harness.
 
 ## Notes
 

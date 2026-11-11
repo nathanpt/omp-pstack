@@ -50,8 +50,7 @@ The control script is code: tested, committed, and re-run by reviewers.
 
 One index plus one file per feature area under `references/features/`, shaped by
 `references/feature-map.md`. Each records what it does, how a user reaches it,
-which command drives it, and its traps. The map is compressed context, not human
-documentation: write it for a reader who cannot open a browser.
+which command drives it, and its traps. The map is compressed context: write it for a reader who cannot open a browser.
 
 ## 4. Wire the project-local skill
 
@@ -59,8 +58,10 @@ Create `verify-<project>` in the skills location Scope identified. It names two
 paths: the control script and the feature map. Under thirty lines: a signpost.
 
 Its frontmatter description is the discovery mechanism: name the project, the
-surface, and when to reach for it. The harness advertises that line and nothing
-else, so no frontmatter means it never registers and a vague one never fires.
+surface, and when to reach for it. No frontmatter and it never registers; a vague
+one never fires. It also carries teardown per `references/isolation.md`: kill only
+what you started, never by process name, and delete scratch state but never the
+evidence, which outlives the run at a path the skill names.
 
 Register it per the register row of `references/harness-contract.md`. If the
 harness does not discover it, report that. Never invent an alternative location.

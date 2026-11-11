@@ -11,19 +11,19 @@ of would be expensive to unthink.
 
 ## Scope: the project root is the boundary
 
-Everything here happens inside one project. A candidate works in its own copy and
-nothing else. Never read a sibling project, the parent directory, or a
-neighbouring repository for a pattern or fixture. If the work needs another
-repository, name it in the brief instead.
+The project is the boundary. A candidate works on a copy of this project and reads
+nothing else: never a sibling project, the parent directory, or a neighbouring
+repository, for a pattern or fixture. The copy is the one thing that leaves the
+project, and `references/isolation.md` governs it. If the work needs another
+repository, name it in the brief.
 
 ## When this earns its cost
 
 Two builds and a judge for one decision. Run it only when the cost of choosing
 wrong is larger than the cost of exploring: a shape other work builds on, an
-interface two projects share, a schema painful to migrate. Skip it when the
-choice is reversible or the options are already concrete. And skip it when you
-cannot say what good looks like, because that is a five-minute question to
-yourself, not a fan-out.
+interface two projects share, a schema painful to migrate. Skip it when the choice
+is reversible, the options are already concrete, or you cannot say what good looks
+like. That last one is a five-minute question to yourself, not a fan-out.
 
 ## 1. Frame, and write the rubric first
 
@@ -37,9 +37,10 @@ criteria, stop and reframe the question before spending two builds on it.
 
 ## 2. Build two candidates
 
-Two, not more. Give each its own isolated copy of the tree and the identical
-brief: the task, the shared context, its own output location, and an instruction
-to write a short rationale naming the alternatives it considered and rejected.
+Two, not more. Give each its own copy per `references/isolation.md`: disk-backed,
+named for the project and the seat, removed when the run ends. Each brief carries
+the task, the shared context, its output location, and an instruction to write a
+short rationale naming the alternatives it considered and rejected.
 
 The prompt is the contract, so both get the same one. Dispatch both in one turn,
 then wait for both to finish. A candidate that produces nothing is a dropout you

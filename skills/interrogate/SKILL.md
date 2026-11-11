@@ -11,11 +11,13 @@ Report what survives. Apply no fixes.
 
 ## Scope: the project root is the boundary
 
-Everything here happens inside one project. An adversary gets a copy of this
-project and nothing else. Never read a sibling project, the parent directory, or
-a neighbouring repository to borrow fixtures, infer a convention, or find a
-comparison. If the change genuinely depends on another repository, name that
-dependency in the brief and let the adversary work without it.
+The project is the boundary. An adversary works on a copy of this project and
+reads nothing else: never a sibling project, the parent directory, or a
+neighbouring repository, to borrow fixtures, infer a convention, or find a
+comparison. The copy is the one thing that leaves the project, and
+`references/isolation.md` governs where it lives and when it dies. If the change
+depends on another repository, name that dependency in the brief rather than
+reading it.
 
 ## 1. Frame the scope and the intent
 
@@ -30,16 +32,13 @@ same direction.
 
 ## 2. Seat two adversaries
 
-Two is the default, on two different model families; it stops paying after three.
+Two is the default, on two seats from different model families.
 
-Give each adversary its own copy of the tree: in the harness's isolation, or the
-system temporary directory, named for the project and the seat. Never beside the
-project and never inside it, since a sibling directory is invisible to git,
-survives the run, and accumulates. Prefer a worktree when the tree is a git repo.
-Repros go in the copy, never in the working tree. Dispatch both, wait for both.
+Give each adversary its own copy per `references/isolation.md`: disk-backed, named
+for the project and the seat, never beside or inside the project, and removed when
+the run ends. Repros go in the copy, never in the working tree. Dispatch both.
 
-Brief each one with the scope, the stated intent, and this instruction word for
-word:
+Brief each with the scope, the stated intent, and this instruction word for word:
 
 > Break this change. Prove every finding with a run against the real code, such
 > as a failing test, a repro script, or command output showing the wrong

@@ -8,6 +8,15 @@
 Upstream describes a set of 58 skills for rigorous engineering work, developed
 against Cursor, Claude Code, and Grok Bot.
 
+## Additional skills
+
+`interrogate` and `arena` are also derived from Lauren Tan's pack under the same
+MIT license. `interrogate` was rewritten to stand alone, because her version
+delegates its fan-out to the `arena` skill. Both default to two seats rather than
+her four, and both are seated through this repo's harness contract instead of
+named model slugs. `arena` keeps her phase structure and drops her slug-resolution
+rules, which this repo's model roles replace.
+
 ## What was taken
 
 Two skills, as ideas rather than text:

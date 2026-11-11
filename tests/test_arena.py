@@ -106,7 +106,8 @@ class CostDisciplineTests(unittest.TestCase):
         """A copy with no named location lands beside the project and stays there."""
         text = adapter()
         self.assertIn("Where isolated copies land", text)
-        self.assertIn("Never a sibling of the project", text)
+        self.assertIn("follow `references/isolation.md`", text)
+        self.assertIn("tmpfs", text)
 
     def test_adapter_warns_against_the_parent_family_seat(self):
         """@slow looks like a worker role and silently lands on the caller's family."""

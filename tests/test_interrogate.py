@@ -62,11 +62,11 @@ class SeatingTests(unittest.TestCase):
         """Diminishing returns after two or three; two families is the floor."""
         text = body()
         self.assertIn("Two is the default", text)
-        self.assertIn("two different model families", text)
+        self.assertIn("two seats from different model families", text)
 
     def test_adversaries_get_isolated_copies(self):
         text = body()
-        self.assertIn("own copy of the tree", text)
+        self.assertIn("own copy per `references/isolation.md`", text)
         self.assertIn("never in the working tree", text)
 
     def test_copies_have_a_named_location(self):
@@ -76,9 +76,13 @@ class SeatingTests(unittest.TestCase):
         invented a sibling directory in the projects root.
         """
         text = body()
-        self.assertIn("system temporary directory", text)
-        self.assertIn("Never beside the project and never inside it", text)
-        self.assertIn("worktree when the tree is a git repo", text)
+        self.assertIn("disk-backed", text)
+        self.assertIn("never beside or inside the project", text)
+        self.assertIn("removed when the run ends", text)
+        iso = (REPO / "references" / "isolation.md").read_text()
+        self.assertIn("disk-backed", iso)
+        self.assertIn("tmpfs", iso)
+        self.assertIn("Teardown", iso)
 
     def test_names_no_model_or_harness_mechanism(self):
         """Seating is the adapter's job, not the skill's."""
