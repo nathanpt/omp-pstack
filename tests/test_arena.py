@@ -100,6 +100,19 @@ class CostDisciplineTests(unittest.TestCase):
         """@slow looks like a worker role and silently lands on the caller's family."""
         self.assertIn("Do not seat a candidate on `@slow`", adapter())
 
+    def test_adapter_documents_that_the_fallback_judge_is_weaker(self):
+        """A same-family judge confirms the rubric instead of testing the candidates."""
+        text = adapter()
+        self.assertIn("@judge-fallback", text)
+        self.assertIn("confirms your framing rather than testing your candidates", text)
+        self.assertIn("say so in the", text)
+
+    def test_adapter_seats_candidates_on_their_own_roles(self):
+        """Candidates must not borrow @reviewer or @advisor, which other skills own."""
+        text = adapter()
+        self.assertIn("@arena-a", text)
+        self.assertIn("@arena-b", text)
+
 
 class ScopeTests(unittest.TestCase):
     def test_states_the_containment_rule(self):
