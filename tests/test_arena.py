@@ -102,6 +102,12 @@ class CostDisciplineTests(unittest.TestCase):
                 self.assertIn(role, text)
         self.assertIn("Nothing here should touch a per-token provider", text)
 
+    def test_adapter_records_where_isolated_copies_land(self):
+        """A copy with no named location lands beside the project and stays there."""
+        text = adapter()
+        self.assertIn("Where isolated copies land", text)
+        self.assertIn("Never a sibling of the project", text)
+
     def test_adapter_warns_against_the_parent_family_seat(self):
         """@slow looks like a worker role and silently lands on the caller's family."""
         self.assertIn("Do not seat a candidate on `@slow`", adapter())

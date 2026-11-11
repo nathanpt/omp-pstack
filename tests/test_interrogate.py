@@ -21,7 +21,7 @@ class SurvivorRuleTests(unittest.TestCase):
     def test_requires_a_rerun_before_keeping_a_finding(self):
         """An unverified finding is an opinion with a command attached."""
         text = body()
-        self.assertIn("Rerun each claimed finding's command", text)
+        self.assertIn("Rerun each finding's command", text)
         self.assertIn("A finding you did not rerun is not a finding", text)
 
     def test_survival_requires_both_failure_and_broken_intent(self):
@@ -66,8 +66,19 @@ class SeatingTests(unittest.TestCase):
 
     def test_adversaries_get_isolated_copies(self):
         text = body()
-        self.assertIn("own isolated copy", text)
+        self.assertIn("own copy of the tree", text)
         self.assertIn("never in the working tree", text)
+
+    def test_copies_have_a_named_location(self):
+        """Observed failure: copies landed beside the project, 1 GB, never cleaned.
+
+        The skill said 'its own isolated copy' and never said where, so the agent
+        invented a sibling directory in the projects root.
+        """
+        text = body()
+        self.assertIn("system temporary directory", text)
+        self.assertIn("Never beside the project and never inside it", text)
+        self.assertIn("worktree when the tree is a git repo", text)
 
     def test_names_no_model_or_harness_mechanism(self):
         """Seating is the adapter's job, not the skill's."""
@@ -81,7 +92,7 @@ class ScopeTests(unittest.TestCase):
     def test_scoped_to_code_changes_only(self):
         """Design review is the decision-record red-team skill's job."""
         text = body()
-        self.assertIn("Using it on a design, a plan, or a document", text)
+        self.assertIn("Using it on a design, plan, or document", text)
 
     def test_states_the_containment_rule(self):
         text = body()

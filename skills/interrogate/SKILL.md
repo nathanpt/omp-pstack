@@ -24,18 +24,19 @@ with the base branch, through the working tree.
 
 State the intent in one or two sentences, from the user's message, the commits,
 and the diff. This is the yardstick every finding is measured against, so write
-it before spawning anything and pass it verbatim. If the intent is unclear and
-the diff does not settle it, stop and ask. A wrong intent makes every verdict
-wrong in the same direction.
+it before spawning anything and pass it verbatim. If the intent is unclear and the diff
+does not settle it, stop and ask. A wrong intent makes every verdict wrong in the
+same direction.
 
 ## 2. Seat two adversaries
 
-Two is the default, on two different model families. Diversity is the point, and
-it stops paying after two or three seats.
+Two is the default, on two different model families; it stops paying after three.
 
-Give each adversary its own isolated copy of the tree. Repros are written there,
-never in the working tree, and nothing is applied back. Two adversaries sharing
-one tree corrupt each other's repros.
+Give each adversary its own copy of the tree: in the harness's isolation, or the
+system temporary directory, named for the project and the seat. Never beside the
+project and never inside it, since a sibling directory is invisible to git,
+survives the run, and accumulates. Prefer a worktree when the tree is a git repo.
+Repros go in the copy, never in the working tree. Dispatch both, wait for both.
 
 Brief each one with the scope, the stated intent, and this instruction word for
 word:
@@ -47,11 +48,10 @@ word:
 > Leave out anything you did not run, including style, naming, structure, and
 > risks that need a future change to matter. No findings is a valid result.
 
-Dispatch both in one turn, then wait for both to reach a terminal state.
 
 ## 3. Verify every finding yourself
 
-Rerun each claimed finding's command in that adversary's copy. Read the output
+Rerun each finding's command in that adversary's copy, and read the output
 yourself rather than trusting the report.
 
 Keep a finding only when the output shows the failure and the failure breaks the
@@ -61,24 +61,25 @@ you did not rerun is not a finding.
 ## 4. Account for every seat
 
 An adversary that failed, timed out, or never reported is a gap. A gap is not a
-pass, and it never reads as clean. An adversary that returned only opinions, with
-nothing reproducible, is dropped and counted as dropped.
+pass and never reads as clean. One that returned only opinions, nothing
+reproducible, is dropped and counted as dropped.
 
 ## 5. Report
 
-- **Intent**: the restatement, unchanged from step 1.
-- **Findings**: for each survivor, the command, its output, how it breaks the
-  intent, and which adversaries found it.
+- **Intent**: the restatement from step 1, unchanged.
+- **Findings**: per survivor, the command, its output, how it breaks the intent,
+  and which adversaries found it.
 - **Dropped**: per adversary, the count and the reason.
-- **Gaps**: any seat that produced nothing, and what it cost you.
-- Say **no verified findings** when none survive. That is common and it is a
-  real result, not a failure.
+- **Gaps**: any seat that produced nothing, and what it cost.
+- Say **no verified findings** when none survive. That is common and is a real
+  result, not a failure.
 
 ## Anti-patterns
 
-- Counting an opinion, a style note, or a future risk as a finding.
-- Keeping a finding you did not rerun.
+- Copying the tree beside the project, or anywhere that outlives the run.
+- Counting an opinion, a style note, or a future risk as a finding, or keeping a
+  finding you did not rerun.
 - Letting a silent seat become a green result.
 - Fixing what you found. This skill reports; repair is a separate act.
-- Using it on a design, a plan, or a document. Those cannot be proven by a run,
-  so review them with the decision-record red-team skill instead.
+- Using it on a design, plan, or document. A run cannot prove those, so review
+  them with the decision-record red-team skill instead.

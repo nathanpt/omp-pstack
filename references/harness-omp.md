@@ -34,6 +34,22 @@ nothing it writes may reach the working tree. Prefer retained artifacts with
 apply disabled, and read the repro out of the isolated copy when verifying.
 Confirm which mechanism the installed version uses before relying on a path.
 
+### Where isolated copies land
+
+OMP's isolation decides this, not the skill, so check the mechanism before
+dispatching. Native isolation may hand each worker its own copy in a location the
+harness manages, and a hand-rolled copy lands wherever the agent invents one.
+
+Observed failure (2026-11-11): an interrogate run with no location rule created
+`sibling-of-project/seat-a` and `seat-b`, each a full 514 MB copy, outside the
+project, outside git, and with nothing to remove them. The skill had said "its own
+isolated copy" and never said where.
+
+So: confirm the location the harness will use before dispatching. If the answer is
+"the agent chooses", choose the system temporary directory, named for the project
+and the seat. Never a sibling of the project. Remove the copies when the run ends;
+proofs are files the adversary reported, not the tree it worked in.
+
 A seat that never reports is a gap. OMP reports agent state, so check for a
 terminal state rather than inferring success from absence of error.
 
