@@ -40,9 +40,11 @@ One entry point, one file, inside the project. Every check calls it. In order of
 importance:
 
 - **Composable interface.** Small commands that chain, not one monolith of flags.
-- **Machine-readable output** by default; human formatting behind a flag. `--dry-run` on anything with side effects.
+- **Machine-readable output** by default; human formatting behind a flag.
+- **`--dry-run` on anything with side effects**, or it will eventually destroy a fixture.
 - **Errors that name the fix.** "No baseline at <path>; run `baseline capture` first."
-- **Subcommands over flags**, with real help text per subcommand.
+- **Subcommands over flags**, so functionality discloses gradually.
+- **Real help text** per subcommand, the cheapest documentation there is.
 
 The control script is code: tested, committed, and re-run by reviewers.
 
@@ -50,7 +52,8 @@ The control script is code: tested, committed, and re-run by reviewers.
 
 One index plus one file per feature area under `references/features/`, shaped by
 `references/feature-map.md`. Each records what it does, how a user reaches it,
-which command drives it, and its traps. The map is compressed context: write it for a reader who cannot open a browser.
+which command drives it, and its traps. The map is compressed context, not human documentation. Write it for a reader who
+has never seen the project and cannot open a browser.
 
 ## 4. Wire the project-local skill
 

@@ -32,7 +32,9 @@ same direction.
 
 ## 2. Seat two adversaries
 
-Two is the default, on two seats from different model families.
+Two is the default, on two seats from different model families. Diversity is the
+point, and it stops paying after two or three seats, so a third costs quota for a
+narrower return.
 
 Give each adversary its own copy per `references/isolation.md`: disk-backed, named
 for the project and the seat, never beside or inside the project, and removed when
@@ -42,7 +44,7 @@ Brief each with the scope, the stated intent, and this instruction word for word
 
 > Break this change. Prove every finding with a run against the real code, such
 > as a failing test, a repro script, or command output showing the wrong
-> behaviour. Keep your repros in your own copy. Report each finding with a title,
+> behavior. Keep your repros in your own copy. Report each finding with a title,
 > the exact command, the output it printed, and the output the intent requires.
 > Leave out anything you did not run, including style, naming, structure, and
 > risks that need a future change to matter. No findings is a valid result.

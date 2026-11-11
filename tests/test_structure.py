@@ -10,8 +10,19 @@ REFERENCES = REPO / "references"
 CONTRACT = REFERENCES / "harness-contract.md"
 
 # Procedures need room for numbered steps. This is a ceiling, not a target.
-MAX_SKILL_LINES = 85
+#
+# Raised 85 -> 110 on 2026-11-11. At 85 every skill sat at 0-1 lines of headroom,
+# so each improvement forced a deletion, and the deletions removed the reason
+# rather than the padding: the address a copy goes to, what it costs, and when it
+# is torn down all fell out of a port under this cap. It stopped bloat by making
+# every skill the same size and punished the clauses that explain why.
+#
+# The cap was always a proxy for "readable cold", which is what actually matters.
+# That property is now guarded directly by the duplicate-rule test below, which
+# fails when one rule is stated in two skill bodies. Size alone never caught that.
+MAX_SKILL_LINES = 110
 VERB_COUNT = 8
+DUPLICATE_RULE_WORDS = 8
 
 
 def skill_files():
@@ -39,6 +50,42 @@ class SizeDisciplineTests(unittest.TestCase):
                     f"{path.parent.name}/SKILL.md is {lines} lines; move content into "
                     "references/ rather than raising this ceiling",
                 )
+
+    def test_no_rule_is_stated_in_two_skill_bodies(self):
+        """One rule, one statement. Two statements drift and nobody notices which wins.
+
+        This is the property size limits were standing in for. A line cap never
+        caught duplication, because two copies of a rule cost exactly as much as
+        one and a cap cannot tell them apart. Shared phrasing can.
+        """
+        def sentences(path):
+            # Section headings are structural and required in every skill, so they
+            # repeat by design. Rules are prose.
+            prose = " ".join(
+                line for line in path.read_text().splitlines()
+                if not line.lstrip().startswith("#")
+            )
+            body = " ".join(prose.split())
+            return {
+                " ".join(s.split())
+                for s in re.split(r"(?<=[.!?])\s+", body)
+                if len(s.split()) >= DUPLICATE_RULE_WORDS
+            }
+
+        seen = {}
+        for path in skill_files():
+            for sentence in sentences(path):
+                seen.setdefault(sentence, []).append(path.parent.name)
+
+        offenders = {
+            s: names for s, names in seen.items() if len(set(names)) > 1
+        }
+        self.assertEqual(
+            offenders,
+            {},
+            "These sentences appear in more than one skill body, so the rule has two "
+            f"sources: {offenders}. State it once, in references/, and point at it.",
+        )
 
     def test_reference_files_exist_and_are_linked(self):
         """Every reference on disk is reachable from the skill that ships it."""

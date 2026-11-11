@@ -98,6 +98,11 @@ family would be worse than no judge at all. If `zai` quota is exhausted, do not
 run arena. Wait for the quota to reset. Running arena without a judge that meets
 the rule produces a verdict you should not act on.
 
+`@judge` and `@slow` currently resolve to the same model. They stay separate
+names because the judge is the one seat that may need re-pointing on its own, and
+collapsing them would make that change reach the wrong callers. `@slow` remains
+off limits for a candidate seat.
+
 Do not seat a candidate on `@slow`. It resolves to the `zai` family and draws on
 the same plan as the interactive session.
 
