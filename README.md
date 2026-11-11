@@ -7,6 +7,21 @@ no harness.
 This is not a fork. Nothing here is copied verbatim. The ideas are hers; the
 portability layer and the failure modes encoded in the tests are local.
 
+## Status: two skills, one evaluated run
+
+`create-verification-skill` and `maintain-verification-skill` are adopted. They
+have been installed on one harness and run once against a real project, which
+produced a working control script, a feature map carrying four empirically
+earned traps, and a proven green path.
+
+What they have not proven is the failure path. See
+[`EVALUATION.md`](EVALUATION.md) for the measured numbers, the split between what
+was verified and what was merely reported, and the specific gaps that remain. The
+short version is that the green path is evidenced and the red path is not.
+
+The rest of Lauren's pack is deliberately not here. `interrogate` is the next
+candidate and waits until this pair has a verdict worth auditing.
+
 ## Why harness-agnostic
 
 The original skills assume one harness: its task tool, its agent types, its model

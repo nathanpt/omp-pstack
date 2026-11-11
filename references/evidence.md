@@ -21,7 +21,7 @@ live inside the skills directory without being mistaken for a skill.
 
 - A throwaway project containing only `.omp/skills/proj-probe/SKILL.md`, opened as
   the working directory, reported the skill visible (`PROJLOCAL=yes`).
-- A real repository where `.omp/skills/verify-fin3/` resolved via `skill://` and
+- A real repository where `.omp/skills/verify-<project>/` resolved via `skill://` and
   the repo-root `skills/` directory did not.
 
 Conclusion: `<project>/.omp/skills/<name>/SKILL.md` is a second discovery root at

@@ -31,7 +31,7 @@ Exercised live against OMP 18.18.3:
 - **Project-local root.** A throwaway project containing only
   `.omp/skills/proj-probe/SKILL.md` was opened as the working directory. Asked
   the model whether it could see `proj-probe`: reported present. Confirmed again
-  in a real repository (2026-11-10), where `.omp/skills/verify-fin3/` was
+  in a real repository (2026-11-10), where `.omp/skills/verify-<project>/` was
   discoverable and the repo-root `skills/` directory was not.
 - **Agent types.** Enumerated from `omp agents unpack` into a throwaway
   directory. The six bundled definitions and their `spawns:` nesting are observed
