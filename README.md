@@ -37,8 +37,24 @@ What they have not proven is the failure path. See
 was verified and what was merely reported, and the gaps that remain. The short
 version is that the green path is evidenced and the red path is not.
 
-`interrogate` and `arena` followed, both built OMP-first rather than ported, and
-both still without a real run behind them.
+`interrogate` and `arena` followed, both built OMP-first rather than ported.
+
+`interrogate` has had one real run, against a live issue on a real project: three
+claims in, six verdicts out, two reproduced and one **killed on evidence** — the
+killed claim having already been written up as a defect worth fixing, which it was
+not. That is the case for the skill, and it is a falsification case, not a
+discovery one. Every surviving claim traced back to the issue's own text, and the
+two adversaries returned identical verdicts on all three claims. Treat it as a
+falsification engine: it proves and disproves written claims with commands the
+operator can rerun. There is no evidence yet that it surfaces defects nobody
+named, and building a test for that turned out to need maintainer-level fluency in
+the target repo.
+
+The same run also reached a live vendor API through a `.env` inherited by the
+copy, and made two billable calls before the seat noticed. Read-only intent does
+not stop a vendor client. That is now a rule in `references/isolation.md`.
+
+`arena` still has no run behind it at all.
 
 ## How the split works
 

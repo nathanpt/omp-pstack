@@ -11,6 +11,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 SKILL = REPO / "skills" / "interrogate" / "SKILL.md"
+SKILLS = REPO / "skills"
 
 
 def body() -> str:
@@ -83,6 +84,27 @@ class SeatingTests(unittest.TestCase):
         self.assertIn("disk-backed", iso)
         self.assertIn("tmpfs", iso)
         self.assertIn("Teardown", iso)
+
+    def test_copies_cannot_reach_a_paid_service(self):
+        """Observed failure: a seat inherited a live .env and made billable calls.
+
+        Read-only intent does not stop a vendor client from spending money. The
+        rule lives in isolation.md; the skill must route there, not restate it.
+        """
+        iso = (REPO / "references" / "isolation.md").read_text()
+        self.assertIn("Secrets travel with the copy", iso)
+        self.assertIn("made two billable API calls", iso)
+        self.assertIn("127.0.0.1:1", iso)
+        self.assertIn("failed isolation", iso)
+        self.assertIn("references/isolation.md", body())
+
+    def test_secret_containment_is_not_restated_in_skill_bodies(self):
+        """One authority: the mechanism belongs in isolation.md only."""
+        for skill in ("interrogate", "arena"):
+            text = (SKILLS / skill / "SKILL.md").read_text()
+            with self.subTest(skill=skill):
+                self.assertNotIn("127.0.0.1:1", text)
+                self.assertNotIn("billable", text)
 
     def test_names_no_model_or_harness_mechanism(self):
         """Seating is the adapter's job, not the skill's."""

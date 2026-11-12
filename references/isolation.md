@@ -43,6 +43,36 @@ Two choices, and pick deliberately rather than by habit:
 A worktree is only cheap if the worker does not need what a worktree omits. Say
 which choice you made and what the worker must do first, in its brief.
 
+## Secrets travel with the copy
+
+A copy carries whatever the working tree carries, and that includes credentials:
+`.env` files, provider keys, tokens, service-account files. A worker told to read
+only is not prevented from spending money, because the vendor's client library
+does not know the worker's intent.
+
+This is not hypothetical. On a real run, a seat's first repro constructed a live
+market-data client from a `.env` in its copy and made two billable API calls
+before the seat noticed and scrubbed its own environment. Both seats then worked
+around it by hand. Nothing in this file had told them to, and the next seat might
+not be as careful.
+
+Before a worker starts, make it unable to reach a paid or production service:
+
+- **Blank the real values.** Substitute obvious dummies for every credential in
+  the copy, and leave the variables present. Deleting the file outright can make a
+  project fail at config validation instead of exercising the code, which hides
+  the very behavior you are testing.
+- **Point endpoints at a closed port.** `127.0.0.1:1` resolves, refuses
+  immediately, and needs no network. Reserve a real endpoint for a run that
+  genuinely requires one, and say so in the brief.
+- **Keep the network out of the proof.** If a finding needs a vendor, mock it in
+  the repro. A finding that requires a live account is not reproducible by the
+  operator, which makes it not a finding.
+
+Say in the brief which credentials were neutralized and how. A run that reached a
+live API has failed isolation regardless of what it found, and that failure
+belongs in the report rather than in a footnote.
+
 ## Teardown
 
 Remove the copies when the run ends, in every outcome including a failed run.

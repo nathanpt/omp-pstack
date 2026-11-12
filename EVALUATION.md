@@ -161,12 +161,16 @@ Three, all fixed in this repo rather than worked around:
 
 ## Consequence for the next skill
 
-`interrogate` was the planned third adoption. This evaluation argues against
-adding it yet. The pair here has a proven green path and an unproven failure
-path, and a third skill would add surface before the second one has a verdict
-anyone can audit. The next useful work is small and closed: red-test the eight
-create-path assertions, and run `maintain-verification-skill` once against the
-target to see whether it actually catches drift.
+`interrogate` was the planned third adoption, and this evaluation argued against
+adding it yet. It was added anyway, and then run once. The verdict on that run is
+narrow: as a falsification engine it works, having killed one claim that was
+already written up as a defect and reproduced two that were real; as a discovery
+engine it is unevidenced, with both adversaries agreeing on every claim.
+
+So the red path for this pair is still the open item. The next useful work is
+small and closed: red-test the eight create-path assertions, and run
+`maintain-verification-skill` once against the target to see whether it actually
+catches drift.
 
 ## Reproducing this
 

@@ -114,9 +114,9 @@ class RepoShapeTests(unittest.TestCase):
                 self.assertIn(ref.name, blob, f"{ref.name} is not linked from anywhere")
 
     def test_isolation_rules_are_stated_once(self):
-        """Location, cost, and teardown live in one file, not three skill bodies."""
+        """Location, cost, teardown, and credential containment live in one file."""
         iso = (REPO / "references" / "isolation.md").read_text()
-        for topic in ("disk-backed", "What it costs", "Teardown"):
+        for topic in ("disk-backed", "What it costs", "Teardown", "Secrets travel with the copy"):
             with self.subTest(topic=topic):
                 self.assertIn(topic, iso)
         for skill in ("interrogate", "arena"):
